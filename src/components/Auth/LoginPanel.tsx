@@ -327,18 +327,6 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLogin, onBack }) => {
                         />
                       ))}
                     </div>
-                    <div className="relative">
-                      <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                      <input
-                        type="text"
-                        required
-                        value={mobileForm.otp}
-                        onChange={(e) => setMobileForm({...mobileForm, otp: e.target.value})}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        placeholder="Enter 6-digit OTP"
-                        maxLength={6}
-                      />
-                    </div>
                     <p className="text-sm text-gray-500 mt-1">
                       OTP sent to +91 {mobileForm.mobile}
                     </p>
