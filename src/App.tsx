@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import Dashboard from './components/Dashboard/Dashboard';
+import './i18n';
 import { 
   Sprout, 
   Shield, 
@@ -16,8 +20,13 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-function App() {
+function LandingPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('problem');
+
+  const handleGetCoverage = () => {
+    navigate('/dashboard');
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -55,7 +64,10 @@ function App() {
                 Learn More
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
-              <button className="border border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors">
+              <button 
+                onClick={handleGetCoverage}
+                className="border border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors"
+              >
                 Get Coverage
               </button>
             </div>
@@ -384,6 +396,17 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
 }
 
