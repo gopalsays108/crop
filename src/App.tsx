@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Dashboard from './components/Dashboard/Dashboard';
+import LoginPanel from './components/Auth/LoginPanel';
 import './i18n';
 import { 
   Sprout, 
@@ -23,10 +24,23 @@ import {
 function LandingPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('problem');
+  const [showLogin, setShowLogin] = useState(false);
 
   const handleGetCoverage = () => {
+    setShowLogin(true);
+  };
+
+  const handleLogin = () => {
     navigate('/dashboard');
   };
+
+  const handleBackToLanding = () => {
+    setShowLogin(false);
+  };
+
+  if (showLogin) {
+    return <LoginPanel onLogin={handleLogin} onBack={handleBackToLanding} />;
+  }
 
   return (
     <div className="min-h-screen bg-white">
