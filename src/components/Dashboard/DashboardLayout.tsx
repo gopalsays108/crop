@@ -15,12 +15,14 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
   activeTab: string;
   onTabChange: (tab: string) => void;
+  onLogout: () => void;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   activeTab,
-  onTabChange
+  onTabChange,
+  onLogout
 }) => {
   const { t, i18n } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -46,6 +48,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     setLanguageDropdownOpen(false);
   };
 
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      onLogout();
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -89,7 +96,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </nav>
 
         <div className="absolute bottom-0 w-full p-3 border-t border-gray-200">
-          <button className="w-full flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+          >
             <LogOut className="h-5 w-5 mr-3" />
             {t('logout')}
           </button>

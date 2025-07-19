@@ -32,8 +32,30 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLogin, onBack }) => {
 
   const [mobileForm, setMobileForm] = useState({
     mobile: '',
-    otp: ''
+    otp: ['', '', '', '', '', '']
   });
+
+  const handleOtpChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    
+    const newOtp = [...mobileForm.otp];
+    newOtp[index] = value;
+    setMobileForm({...mobileForm, otp: newOtp});
+    
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+    // Handle backspace
+    if (e.key === 'Backspace' && !mobileForm.otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
@@ -98,9 +120,10 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLogin, onBack }) => {
     e.preventDefault();
     setIsLoading(true);
 
+    const otpString = mobileForm.otp.join('');
     setTimeout(() => {
       setIsLoading(false);
-      if (mobileForm.otp === '123456') {
+      if (otpString === '123456') {
         toast.success('Login Successful!', {
           duration: 2000,
           position: 'top-center'
@@ -256,13 +279,17 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLogin, onBack }) => {
                   Mobile Number
                 </label>
                 <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center">
+                    <span className="text-lg mr-2">🇮🇳</span>
+                    <span className="text-gray-500 text-sm">+91</span>
+                  </div>
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                   <input
                     type="tel"
                     required
                     value={mobileForm.mobile}
                     onChange={(e) => setMobileForm({...mobileForm, mobile: e.target.value})}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full pl-20 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter your mobile number"
                     maxLength={10}
                   />
@@ -284,6 +311,22 @@ const LoginPanel: React.FC<LoginPanelProps> = ({ onLogin, onBack }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Enter OTP
                     </label>
+                    <div className="flex space-x-2 justify-center">
+                      {mobileForm.otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          id={`otp-${index}`}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]"
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleOtpChange(index, e.target.value)}
+                          onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                          className="w-12 h-12 text-center text-lg font-semibold border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        />
+                      ))}
+                    </div>
                     <div className="relative">
                       <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                       <input

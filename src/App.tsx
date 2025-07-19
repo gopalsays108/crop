@@ -38,6 +38,9 @@ function LandingPage() {
     setShowLogin(false);
   };
 
+  const handleLogout = () => {
+    navigate('/');
+  };
   if (showLogin) {
     return <LoginPanel onLogin={handleLogin} onBack={handleBackToLanding} />;
   }
@@ -414,11 +417,15 @@ function LandingPage() {
 }
 
 function App() {
+  const handleLogout = () => {
+    window.location.href = '/';
+  };
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
       </Routes>
     </Router>
   );

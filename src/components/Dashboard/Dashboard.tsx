@@ -5,7 +5,11 @@ import FarmerManagement from './FarmerManagement';
 import CropManagement from './CropManagement';
 import NotificationPanel from './NotificationPanel';
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+  onLogout: () => void;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const renderContent = () => {
@@ -31,7 +35,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
+    <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab} onLogout={onLogout}>
       {renderContent()}
     </DashboardLayout>
   );
